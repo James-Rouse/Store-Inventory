@@ -21,6 +21,25 @@ session = Session()
 Base = declarative_base()
 
 
+def add_csv_to_db():
+    """Add CSV contents into DB."""
+    with open("inventory.csv") as csvfile:
+        inventory_reader = csv.reader(csvfile)
+        next(inventory_reader, None)
+        # ^^^Line 76 source:
+        # https://stackoverflow.com
+        # /questions/14257373/skip-the-headers-when-editing-a-csv-file-using-python
+        for item in inventory_reader:
+            name = item[0]
+            price = clean_price(item[1])
+            quantity = item[2]
+            date = clean_date(item[3])
+            product_one = Product(product_name=name, product_price=price,
+                                  product_quantity=quantity, date_updated=date)
+            session.add(product_one)
+            session.commit()
+
+
 def clean_date(date_string):
     """Format date from csv appropriately for database entry."""
     split_date = date_string.split("/")
@@ -57,18 +76,4 @@ class Product(Base):
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
 
-    with open("inventory.csv") as csvfile:
-        inventory_reader = csv.reader(csvfile)
-        next(inventory_reader, None)
-        # ^^^Line 76 source:
-        # https://stackoverflow.com
-        # /questions/14257373/skip-the-headers-when-editing-a-csv-file-using-python
-        for item in inventory_reader:
-            name = item[0]
-            price = clean_price(item[1])
-            quantity = item[2]
-            date = clean_date(item[3])
-            product_one = Product(product_name=name, product_price=price,
-                                  product_quantity=quantity, date_updated=date)
-            session.add(product_one)
-            session.commit()
+    add_csv_to_db()
