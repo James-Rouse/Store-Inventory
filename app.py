@@ -8,7 +8,8 @@ import os
 
 try:
     os.remove("inventory.db")
-    # ^^^Line 37 source: https://www.w3schools.com/python/python_file_remove.asp
+    # ^^^Source for above line:
+    # https://www.w3schools.com/python/python_file_remove.asp
 except PermissionError:
     print(f"{'-'*107}\nPlease close any program accessing inventory.db so that \
 it can be deleted and remade when this script runs.\n{'-'*107}")
@@ -26,7 +27,7 @@ def add_csv_to_db():
     with open("inventory.csv") as csvfile:
         inventory_reader = csv.reader(csvfile)
         next(inventory_reader, None)
-        # ^^^Line 76 source:
+        # ^^^Source for above line:
         # https://stackoverflow.com
         # /questions/14257373/skip-the-headers-when-editing-a-csv-file-using-python
         for item in inventory_reader:
@@ -51,12 +52,17 @@ def clean_date(date_string):
 
 def clean_price(uncleaned_price):
     """Reformat CSV price for entry into DB."""
-    split_price = uncleaned_price.split("$")
-    return split_price[1]
+    split_dollar_sign = uncleaned_price.split("$")
+    split_decimal = split_dollar_sign[1].split(".")
+    cleaned_price = "".join(split_decimal)
+    # ^^^Source for above 2 lines:
+    # https://www.kite.com/python/answers/how-to-join-a-list-of-integers-into-a-string-in-python
+    return cleaned_price
 
 
 def menu():
-    """Add menu with options to display product ID, add new product to DB, and backup DB to CSV."""
+    """Add menu with options to display product ID,\
+    add new product to DB, and backup DB to CSV."""
     pass
 
 
@@ -87,6 +93,7 @@ class Product(Base):
     date_updated = Column(Date)
 
     def __repr__(self):
+        """Return printable representation of Product."""
         return f"<Product(product_name={self.product_name},\
                 product_quantity={self.product_quantity},\
                 product_price={self.product_price},\
