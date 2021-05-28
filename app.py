@@ -41,7 +41,7 @@ def add_csv_to_db():
 
 
 def clean_date(date_string):
-    """Format date from csv appropriately for database entry."""
+    """Reformat CSV date for entry into DB."""
     split_date = date_string.split("/")
     year = int(split_date[2])
     month = int(split_date[0])
@@ -50,13 +50,33 @@ def clean_date(date_string):
 
 
 def clean_price(uncleaned_price):
-    """Format price from csv appropriately for database entry."""
+    """Reformat CSV price for entry into DB."""
     split_price = uncleaned_price.split("$")
     return split_price[1]
 
 
+def menu():
+    """Add menu with options to display product ID, add new product to DB, and backup DB to CSV."""
+    pass
+
+
+def display_product_id():
+    """Display a product's info via its product ID."""
+    pass
+
+
+def add_product_to_db():
+    """Add new product to DB."""
+    pass
+
+
+def backup_db_to_csv():
+    """Backup BD as CSV."""
+    pass
+
+
 class Product(Base):
-    """Model called Product that the SQLAlchemy ORM will use to build the database."""
+    """Model that SQLAlchemy ORM will use to build DB."""
 
     __tablename__ = "product"
 
