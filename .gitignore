@@ -115,3 +115,7 @@ dmypy.json
 
 # Visual Studio Code
 .vscode
+
+# DB and CSV viles
+inventory_backup.csv
+inventory.db
