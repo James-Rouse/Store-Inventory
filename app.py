@@ -1,3 +1,11 @@
+"""Store inventory console application.
+
+Loads an existing store's inventory data from a CSV file into a SQLite
+database. The application allows a user to interact with the records
+stored in the database to view existing records, add new items, and
+backup/export the existing state of the database into a CSV file.
+
+"""
 from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
