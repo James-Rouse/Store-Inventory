@@ -92,27 +92,25 @@ def menu():
     """Add menu with options to display product ID,\
     add new product to DB, and backup DB to CSV."""
     while True:
-        print(f"""\n{'-'*15}\nStore Inventory\n{'-'*15}\n
-            \r>Press [V] to view a specific inventory product's information.\n
-            \r>Press [A] to update or add a  product to the inventory.\n
-            \r>Press [B] to generate a CSV backup of the store inventory.\n
-            \r>Press [Q] to quit program.\n""")
-        while True:
-            answer = input("Enter an option: ")
-            answer = answer.upper()
-            if answer == "V":
-                display_product_id()
-            elif answer == "A":
-                add_product_to_db()
-            elif answer == "B":
-                backup_db_to_csv()
-            elif answer == "Q":
-                print("\nExiting program...\n")
-                exit()
-            else:
-                print("\nPlease input one of the given options.\n")
-                continue
-            break
+        answer = input(f"""\n{'-'*15}\nStore Inventory\n{'-'*15}\n
+        \r>Press [V] to view a specific inventory product's information.\n
+        \r>Press [A] to update or add a  product to the inventory.\n
+        \r>Press [B] to generate a CSV backup of the store inventory.\n
+        \r>Press [Q] to quit program.\n
+        \rEnter an option: """)
+        answer = answer.upper()
+        if answer == "V":
+            display_product_id()
+        elif answer == "A":
+            add_product_to_db()
+        elif answer == "B":
+            backup_db_to_csv()
+        elif answer == "Q":
+            print("\nExiting program...\n")
+            exit()
+        else:
+            print("\nPlease input one of the given options.\n")
+            continue
 
 
 def display_product_id():
@@ -126,8 +124,7 @@ def display_product_id():
             print("\nPlease enter an existing product ID.")
             continue
         else:
-            print(product)
-            input("Enter any key to return to main menu: ")
+            input(f"{product}\nEnter any key to return to main menu: ")
             break
 
 
@@ -159,15 +156,15 @@ def add_product_to_db():
             product.date_updated = date
             session.commit()
             update_indicator = 1
-            print(f"\n{name} has been updated:\n\
-                  {session.query(Product).get(product.product_id)}")
-            input("Enter any key to return to main menu: ")
+            input(f"""\n{name} has been updated:\n\
+                  {session.query(Product).get(product.product_id)}
+                  \rEnter any key to return to main menu: """)
     if update_indicator == 0:
         session.add(new_product)
         session.commit()
-        print(f"\n{name} has been added to the inventory:\n\
-              {session.query(Product).get(new_product.product_id)}")
-        input("Enter any key to return to main menu: ")
+        input(f"""\n{name} has been added to the inventory:\n\
+              {session.query(Product).get(new_product.product_id)}
+              \rEnter any key to return to main menu: """)
 
 
 def backup_db_to_csv():
@@ -186,8 +183,10 @@ def backup_db_to_csv():
                 "product_price": product.product_price,
                 "product_quantity": product.product_quantity,
                 "date_updated": product.date_updated})
-    print("\nYour CSV backup has been generated into this program's folder.\n")
-    input("Enter any key to return to main menu: ")
+    input("""\n--------------------------------------------------------------
+          \rYour CSV backup has been generated into this program's folder.
+          \r--------------------------------------------------------------\n
+          \rEnter any key to return to main menu: """)
 
 
 if __name__ == "__main__":
