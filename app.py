@@ -90,27 +90,41 @@ def menu():
     """Add menu with options to display product ID,\
     add new product to DB, and backup DB to CSV."""
     while True:
-        print(f"""{'-'*15}\nStore Inventory\n{'-'*15}
-            \r**
-            \rPress [V] to view a particular inventory product's information.
-            \r**
-            \rPress [A] to add a new product to the inventory.
-            \r**
-            \rPress [B] to generate a CSV backup of the entire store inventory.
-            \r**
-            \rPress [Q] to quit program.
-            \r**""")
-        answer = input("Enter an option: ")
-        if answer.upper() == "V":
-            while True:
-                id_number = input("\nEnter product ID number: ")
-                returned_item = display_product_id(id_number)
-                if returned_item is None:
-                    print("\nPlease enter an existing produsct ID.")
-                    continue
-                else:
-                    print(returned_item)
-                    break
+        print(f"""\n{'-'*15}\nStore Inventory\n{'-'*15}
+            \r
+            \r>Press [V] to view a particular inventory product's information.
+            \r
+            \r>Press [A] to add a new product to the inventory.
+            \r
+            \r>Press [B] to generate a CSV backup of the store inventory.
+            \r
+            \r>Press [Q] to quit program.
+            \r""")
+        while True:
+            answer = input("Enter an option: ")
+            answer = answer.upper()
+            if answer == "V":
+                while True:
+                    id_number = input("\nEnter product ID number: ")
+                    returned_item = display_product_id(id_number)
+                    if returned_item is None:
+                        print("\nPlease enter an existing product ID.")
+                        continue
+                    else:
+                        print(returned_item)
+                        input("Enter any key to return to main menu: ")
+                        break
+            elif answer == "A":
+                pass
+            elif answer == "B":
+                pass
+            elif answer == "Q":
+                print("\nExiting program...\n")
+                exit()
+            else:
+                print("\nPlease input one of the given options.")
+                continue
+            break
 
 
 def display_product_id(id_number):
