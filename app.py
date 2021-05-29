@@ -37,11 +37,11 @@ class Product(Base):
 
     __tablename__ = "product"
 
-    product_id = Column(Integer, primary_key=True)
-    product_name = Column(String)
-    product_price = Column(Integer)
-    product_quantity = Column(Integer)
-    date_updated = Column(Date)
+    product_id = Column("ID", Integer, primary_key=True)
+    product_name = Column("Name", String)
+    product_price = Column("Price", Integer)
+    product_quantity = Column("Quantity", Integer)
+    date_updated = Column("Date Updated", Date)
 
     def __repr__(self):
         """Return printable representation of Product."""
