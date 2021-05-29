@@ -90,30 +90,16 @@ def menu():
     """Add menu with options to display product ID,\
     add new product to DB, and backup DB to CSV."""
     while True:
-        print(f"""\n{'-'*15}\nStore Inventory\n{'-'*15}
-            \r
-            \r>Press [V] to view a particular inventory product's information.
-            \r
-            \r>Press [A] to add a new product to the inventory.
-            \r
-            \r>Press [B] to generate a CSV backup of the store inventory.
-            \r
-            \r>Press [Q] to quit program.
-            \r""")
+        print(f"""\n{'-'*15}\nStore Inventory\n{'-'*15}\n
+            \r>Press [V] to view a specific inventory product's information.\n
+            \r>Press [A] to add a new product to the inventory.\n
+            \r>Press [B] to generate a CSV backup of the store inventory.\n
+            \r>Press [Q] to quit program.\n""")
         while True:
             answer = input("Enter an option: ")
             answer = answer.upper()
             if answer == "V":
-                while True:
-                    id_number = input("\nEnter product ID number: ")
-                    returned_item = display_product_id(id_number)
-                    if returned_item is None:
-                        print("\nPlease enter an existing product ID.")
-                        continue
-                    else:
-                        print(returned_item)
-                        input("Enter any key to return to main menu: ")
-                        break
+                display_product_id(answer)
             elif answer == "A":
                 pass
             elif answer == "B":
@@ -122,16 +108,25 @@ def menu():
                 print("\nExiting program...\n")
                 exit()
             else:
-                print("\nPlease input one of the given options.")
+                print("\nPlease input one of the given options.\n")
                 continue
             break
 
 
-def display_product_id(id_number):
+def display_product_id(answer):
     """Display a product's info via its product ID."""
-    return session.query(Product).get(id_number)
-    # ^^^Source for above line:
-    # https://stackoverflow.com/questions/6750017/how-to-query-database-by-id-using-sqlalchemy
+    while True:
+        id_number = input("\nEnter product ID number: ")
+        product = session.query(Product).get(id_number)
+        # ^^^Source for above line:
+        # https://stackoverflow.com/questions/6750017/how-to-query-database-by-id-using-sqlalchemy
+        if product is None:
+            print("\nPlease enter an existing product ID.")
+            continue
+        else:
+            print(product)
+            input("Enter any key to return to main menu: ")
+            break
 
 
 def add_product_to_db():
