@@ -99,7 +99,7 @@ def menu():
             answer = input("Enter an option: ")
             answer = answer.upper()
             if answer == "V":
-                display_product_id(answer)
+                display_product_id()
             elif answer == "A":
                 pass
             elif answer == "B":
@@ -113,7 +113,7 @@ def menu():
             break
 
 
-def display_product_id(answer):
+def display_product_id():
     """Display a product's info via its product ID."""
     while True:
         id_number = input("\nEnter product ID number: ")
