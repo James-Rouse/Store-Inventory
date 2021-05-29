@@ -17,6 +17,7 @@ it can be deleted and remade when this script runs.\n{'-'*107}")
 except FileNotFoundError:
     pass
 
+
 engine = create_engine("sqlite:///inventory.db", echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -104,7 +105,7 @@ def menu():
             elif answer == "A":
                 add_product_to_db()
             elif answer == "B":
-                pass
+                backup_db_to_csv()
             elif answer == "Q":
                 print("\nExiting program...\n")
                 exit()
@@ -171,7 +172,22 @@ def add_product_to_db():
 
 def backup_db_to_csv():
     """Backup BD as CSV."""
-    pass
+    with open("inventory_backup.csv", "w", newline="") as inventory_backup:
+        fieldnames = ["product_name",
+                      "product_price",
+                      "product_quantity",
+                      "date_updated"]
+        inventory_writer = csv.DictWriter(inventory_backup,
+                                          fieldnames=fieldnames)
+        inventory_writer.writeheader()
+        for product in session.query(Product):
+            inventory_writer.writerow({
+                "product_name": product.product_name,
+                "product_price": product.product_price,
+                "product_quantity": product.product_quantity,
+                "date_updated": product.date_updated})
+    print("\nYour CSV backup has been generated into this program's folder.\n")
+    input("Enter any key to return to main menu: ")
 
 
 if __name__ == "__main__":
