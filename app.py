@@ -22,6 +22,32 @@ session = Session()
 Base = declarative_base()
 
 
+class Product(Base):
+    """Model that SQLAlchemy ORM will use to build DB."""
+
+    __tablename__ = "product"
+
+    product_id = Column(Integer, primary_key=True)
+    product_name = Column(String)
+    product_price = Column(Integer)
+    product_quantity = Column(Integer)
+    date_updated = Column(Date)
+
+    def __repr__(self):
+        """Return printable representation of Product."""
+        return f"""\n----------
+                \rProduct ID: {self.product_id}
+                \r----------
+                \rName: {self.product_name}
+                \r----------
+                \rQuantity: {self.product_quantity}
+                \r----------
+                \rPrice: {self.product_price}
+                \r----------
+                \rDate Updated: {self.date_updated}
+                \r----------\n"""
+
+
 def add_csv_to_db():
     """Add CSV contents into DB."""
     with open("inventory.csv") as csvfile:
@@ -35,9 +61,9 @@ def add_csv_to_db():
             price = clean_price(item[1])
             quantity = item[2]
             date = clean_date(item[3])
-            product_one = Product(product_name=name, product_price=price,
-                                  product_quantity=quantity, date_updated=date)
-            session.add(product_one)
+            product = Product(product_name=name, product_price=price,
+                              product_quantity=quantity, date_updated=date)
+            session.add(product)
             session.commit()
 
 
@@ -63,12 +89,35 @@ def clean_price(uncleaned_price):
 def menu():
     """Add menu with options to display product ID,\
     add new product to DB, and backup DB to CSV."""
-    pass
+    while True:
+        print(f"""{'-'*15}\nStore Inventory\n{'-'*15}
+            \r**
+            \rPress [V] to view a particular inventory product's information.
+            \r**
+            \rPress [A] to add a new product to the inventory.
+            \r**
+            \rPress [B] to generate a CSV backup of the entire store inventory.
+            \r**
+            \rPress [Q] to quit program.
+            \r**""")
+        answer = input("Enter an option: ")
+        if answer.upper() == "V":
+            while True:
+                id_number = input("\nEnter product ID number: ")
+                returned_item = display_product_id(id_number)
+                if returned_item is None:
+                    print("\nPlease enter an existing produsct ID.")
+                    continue
+                else:
+                    print(returned_item)
+                    break
 
 
-def display_product_id():
+def display_product_id(id_number):
     """Display a product's info via its product ID."""
-    pass
+    return session.query(Product).get(id_number)
+    # ^^^Source for above line:
+    # https://stackoverflow.com/questions/6750017/how-to-query-database-by-id-using-sqlalchemy
 
 
 def add_product_to_db():
@@ -81,26 +130,8 @@ def backup_db_to_csv():
     pass
 
 
-class Product(Base):
-    """Model that SQLAlchemy ORM will use to build DB."""
-
-    __tablename__ = "product"
-
-    product_id = Column(Integer, primary_key=True)
-    product_name = Column(String)
-    product_price = Column(Integer)
-    product_quantity = Column(Integer)
-    date_updated = Column(Date)
-
-    def __repr__(self):
-        """Return printable representation of Product."""
-        return f"<Product(product_name={self.product_name},\
-                product_quantity={self.product_quantity},\
-                product_price={self.product_price},\
-                date_updated={self.date_updated})>"
-
-
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
 
     add_csv_to_db()
+    menu()
