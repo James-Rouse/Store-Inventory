@@ -60,26 +60,33 @@ class Product(Base):
 
 def add_csv_to_db():
     """Add CSV contents into DB."""
-    with open("inventory.csv") as csvfile:
-        inventory_reader = csv.reader(csvfile)
+    with open("inventory.csv") as inventory_csv:
+        inventory_reader = csv.reader(inventory_csv)
         next(inventory_reader, None)
         # ^^^Source for above line:
         # https://stackoverflow.com
         # /questions/14257373/skip-the-headers-when-editing-a-csv-file-using-python
-        for item in inventory_reader:
-            name = item[0]
-            price = clean_price(item[1])
-            quantity = item[2]
-            date = clean_date(item[3])
-            product = Product(product_name=name, product_price=price,
-                              product_quantity=quantity, date_updated=date)
-            session.add(product)
+        for csv_product in inventory_reader:
+            name = csv_product[0]
+            price = clean_price(csv_product[1])
+            quantity = csv_product[2]
+            date = clean_date(csv_product[3])
+            db_product = Product(product_name=name, product_price=price,
+                                 product_quantity=quantity, date_updated=date)
+            session.add(db_product)
+            for product1 in session.query(Product):
+                for product2 in session.query(Product):
+                    if product1.product_name == product2.product_name:
+                        if product1.date_updated < product2.date_updated:
+                            session.delete(product1)
+                        if product2.date_updated < product1.date_updated:
+                            session.delete(product2)
             session.commit()
 
 
-def clean_date(date_string):
+def clean_date(uncleaned_date):
     """Reformat CSV date for entry into DB."""
-    split_date = date_string.split("/")
+    split_date = uncleaned_date.split("/")
     year = int(split_date[2])
     month = int(split_date[0])
     day = int(split_date[1])
